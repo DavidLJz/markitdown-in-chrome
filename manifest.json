@@ -1,0 +1,21 @@
+{
+	"name": "Clip to Markdown",
+	"version": "0.1",
+	"description": "Save selected text to a markdown file",
+	"permissions" : [
+		"storage",
+		"declarativeContent",
+		"activeTab"
+	],
+	"background": {
+		"scripts": ["background.js"],
+		"persistent": false
+	},
+	"page_action" : {
+		"default_popup" : "popup.html",
+		"default_icon" : {}
+	},
+	"options_page": "options.html",
+	"icons" : {},
+	"manifest_version": 2
+}
