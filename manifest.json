@@ -3,7 +3,6 @@
 	"version": "0.1",
 	"description": "Save selected text to a markdown file",
 	"permissions" : [
-		//"storage",
 		"declarativeContent",
 		"activeTab" // get permissions only for the active tab
 	],
