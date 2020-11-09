@@ -47,12 +47,19 @@ function setFileSave(fileType = '') {
 
 /* selected text as #output's contents */
 function setPopup(selection) {
-	output.innerHTML = selection[0];
+	let plain = selection[0][0];
+	
+	if (selection[1]) {
+		let rich = selection[1];
+		console.log(rich);
+	}
+
+	display.innerHTML = plain;
 }
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 	chrome.tabs.executeScript(tabs[0].id, {
-		"file" : "scripts/get_selection.js"
+		"file" : "content_scripts/get_selection.js"
 	}, function(selection) {
 		setPopup(selection);
 		setFileSave();
