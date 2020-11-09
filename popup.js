@@ -3,21 +3,51 @@ output = document.getElementById("output");
 
 downloadBtn = document.getElementById('download');
 
-function returnUri(myString) {
-	let fileContents = encodeURIComponent(myString);
-	let = uriContents = 'data:text/csv;charset=utf-8,' + fileContents;
-	return uriContents;
+fileType = document.getElementById('file-type-select');
+
+/* on change file type, prepare change url accordingly */
+fileType.addEventListener('change', function(){
+	setFileSave(this.value);
+});
+
+function setFileSave(fileType = '') {
+	file = (function() {
+		let name = new Date().toISOString().slice(0,19).replace(/-/g, "");
+		let mediaType = '';
+		let encoding = 'charset=utf-8,';
+		let contents = encodeURIComponent(output.innerHTML);
+
+		switch (fileType) {
+			case '1':
+				mediaType += 'text/plain;';
+				name += '.txt';
+				break;
+			case '2':
+				mediaType += 'text/markdown;';
+				name += '.md';
+				break;
+			case '3':
+				mediaType += 'text/html;';
+				name += '.html';
+				break;
+		}
+
+	    return {
+	    	'name' : name,
+	    	'mediaType' : mediaType,
+	    	'contents' : contents, 
+	    	'encoding' : encoding, 
+	    	'uri' : 'data:' + mediaType + encoding + contents,
+	    }
+	})();
+
+	downloadBtn.setAttribute("download", file.name);
+	downloadBtn.setAttribute("href", file.uri);
 }
 
 /* selected text as #output's contents */
 function setPopup(selection) {
 	output.innerHTML = selection[0];
-
-	/* on click, save text as file */
-	let dateStr = new Date().toISOString().slice(0,19).replace(/-/g, "");
-
-	downloadBtn.setAttribute("download", dateStr + '.txt');
-	downloadBtn.setAttribute("href", returnUri(output.innerHTML));
 }
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -25,5 +55,6 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		"file" : "scripts/get_selection.js"
 	}, function(selection) {
 		setPopup(selection);
+		setFileSave();
 	});
 });
