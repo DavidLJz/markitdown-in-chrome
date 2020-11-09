@@ -1,5 +1,7 @@
 /* where text will be shown */
-output = document.getElementById("output");
+display = document.getElementById("display");
+
+richText = document.getElementById("rich-text");
 
 downloadBtn = document.getElementById('download');
 
@@ -15,7 +17,9 @@ function setFileSave(fileType = '') {
 		let name = new Date().toISOString().slice(0,19).replace(/-/g, "");
 		let mediaType = '';
 		let encoding = 'charset=utf-8,';
-		let contents = encodeURIComponent(output.innerHTML);
+
+		/* Convert the DOM to plaintext or markdown */
+		let contents = encodeURIComponent(display.innerHTML);
 
 		switch (fileType) {
 			case '1':
@@ -46,22 +50,33 @@ function setFileSave(fileType = '') {
 }
 
 /* selected text as #output's contents */
-function setPopup(selection) {
-	let plain = selection[0][0];
-	
-	if (selection[1]) {
-		let rich = selection[1];
-		console.log(rich);
+function setPopup(selection) 
+{
+	if (!selection.string || !selection.dom) {
+		mustHide = document.getElementsByClassName('on-selection');
+
+		for (let i = 0; i < mustHide.length; i++) {
+			mustHide[i].style.display = 'none';
+		}
+
+		mustShow = document.getElementsByClassName('no-selection');
+
+		for (let i = 0; i < mustShow.length; i++) {
+			mustShow[i].style.display = '';
+		}
+
+		return;
 	}
 
-	display.innerHTML = plain;
+	display.innerHTML = selection.string;
+	richText.innerHTML = JSON.parse(selection.dom);
 }
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 	chrome.tabs.executeScript(tabs[0].id, {
 		"file" : "content_scripts/get_selection.js"
-	}, function(selection) {
-		setPopup(selection);
+	}, function(result) {
+		setPopup(result[0]);
 		setFileSave();
 	});
 });
