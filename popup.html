@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<style>
-			button {
-				height: 30px;
-				width: 30px;
-				outline: none;
-			}
-		</style>
-	</head>
+<head>
+	<style>
+		body {
+			min-width: 200px;
+		}
+	</style>
+</head>
 
-	<body>
-		<button id="changeColor"></button>
-		<script type="text/javascript" src="popup.js"></script>
-	</body>
+<body>
+	<div id="display" class="on-selection"></div>
+	<div id="rich-text" class="on-selection" style="display:none"></div>
+
+	<select id="file-type-select" name="file-type" class="on-selection">
+		<option value="1">Plain text</option>
+		<option value="2">Markdown</option>
+		<option value="3">HTML source</option>
+	</select>
+
+	<a href="#" id="download" class="on-selection">Download text</a>
+
+	<div class="no-selection" style="display:none">
+		There is no selected text!
+	</div>
+
+	<script type="text/javascript" src="popup.js"></script>
+</body>
 </html>
