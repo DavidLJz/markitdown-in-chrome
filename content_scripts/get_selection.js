@@ -1,21 +1,24 @@
 (function(){
+	const sel = window.getSelection();
 
-	const selection = window.getSelection();
+	let obj;
 
-	let string, dom;
-
-	if (selection && selection.rangeCount && !selection.isCollapsed) 
+	if (sel && sel.rangeCount && !sel.isCollapsed) 
 	{
-		string = selection.toString();
-		dom = selection.anchorNode.parentElement.outerHTML;
+		string = sel.toString();
+		dom = sel.anchorNode.parentElement.outerHTML;
+
+		obj = {
+			'string' : string,
+			'dom' : JSON.stringify(dom),
+		};
+
+		chrome.storage.local.set(obj);
 	}
-
-	obj = {
-		'string' : string,
-		'dom' : JSON.stringify(dom),
-	};
-
-	chrome.storage.local.set(obj);
+	else
+	{
+		console.log('Nothing selected');
+	}
 
 	return obj;
 })();
