@@ -1,6 +1,6 @@
 {
 	"name": "Clip to Markdown",
-	"version": "0.1",
+	"version": "0.0.1",
 	"description": "Save selected text to a markdown file",
 	"permissions" : [
 		"declarativeContent",
