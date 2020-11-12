@@ -15,5 +15,7 @@
 		'dom' : JSON.stringify(dom),
 	};
 
+	chrome.storage.local.set(obj);
+
 	return obj;
 })();

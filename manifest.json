@@ -4,7 +4,8 @@
 	"description": "Save selected text to a markdown file",
 	"permissions" : [
 		"declarativeContent",
-		"activeTab" // get permissions only for the active tab
+		"activeTab", // get permissions only for the active tab
+		"storage"
 	],
 	"browser_action" : {
 		"default_popup" : "popup.html"
