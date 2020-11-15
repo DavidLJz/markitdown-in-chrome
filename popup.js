@@ -43,9 +43,14 @@ function createFile(data)
 	let name = new Date().toISOString().slice(0,19).replace(/-/g, "");
 	let mediaType = '';
 	let encoding = 'charset=utf-8,';
+	
+	function toMarkdown(node) { 
+		let td = new TurndownService();
+		return td.turndown(node);
+	}
 
 	let contents = {
-		'md' : JSON.parse(data.dom),
+		'md' : toMarkdown(JSON.parse(data.dom)),
 		'html' : JSON.parse(data.dom),
 		'txt' : data.string
 	}
