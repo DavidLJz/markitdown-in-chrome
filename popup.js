@@ -7,7 +7,7 @@ downloadBtn = document.getElementById('download');
 /* select file type */
 fileTypeSelector = document.getElementById('file-type-select');
 
-/* on change file type, prepare change url accordingly */
+/* update url to download desired filetype */
 fileTypeSelector.addEventListener('change', function(){
 	getFileFromClip().then(function (file) {
 		downloadBtn.setAttribute("download", file.name);
@@ -44,9 +44,14 @@ function createFile(data)
 	let mediaType = '';
 	let encoding = 'charset=utf-8,';
 
+	function toMarkdown(node) { 
+		let td = new TurndownService();
+		return td.turndown(node);
+	}
+
 	let contents = {
-		'md' : JSON.parse(data.dom),
-		'html' : JSON.parse(data.dom),
+		'md' : toMarkdown(data.dom),
+		'html' : data.dom,
 		'txt' : data.string
 	}
 
@@ -78,6 +83,7 @@ function createFile(data)
     }
 }
 
+/* fetch saved selection from storage and encode */
 function getFileFromClip () {
 	return new Promise((resolve,reject) => {
 		chrome.storage.local.get(['string','dom'], function(data){

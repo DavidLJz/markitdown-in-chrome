@@ -5,12 +5,21 @@
 
 	if (sel && sel.rangeCount && !sel.isCollapsed) 
 	{
+		/* DOM inner text only */
 		string = sel.toString();
-		dom = sel.anchorNode.parentElement.outerHTML;
+
+		/* convert selected DOM to string */
+		dom = () => {
+			let nodes = sel.getRangeAt(0).cloneContents();
+
+			return [...nodes.childNodes].map(
+				n => n.outerHTML 
+			).join('\n')
+		};
 
 		obj = {
 			'string' : string,
-			'dom' : JSON.stringify(dom),
+			'dom' : dom()
 		};
 
 		chrome.storage.local.set(obj);

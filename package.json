@@ -1,0 +1,25 @@
+{
+  "name": "clip-to-markdown-chrome",
+  "version": "0.0.1",
+  "description": "Save selected text to a markdown/HTML/plain text file",
+  "main": "popup.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidLJz/markitdown-in-chrome.git"
+  },
+  "keywords": [
+    "chrome",
+    "chrome-extension",
+    "extension",
+    "clipboard"
+  ],
+  "author": "David Lugo <4dlj1995@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DavidLJz/markitdown-in-chrome/issues"
+  },
+  "homepage": "https://github.com/DavidLJz/markitdown-in-chrome#readme",
+  "dependencies": {
+    "turndown": "7.*"
+  }
+}
