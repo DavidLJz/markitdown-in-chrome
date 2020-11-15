@@ -5,6 +5,7 @@
 
 	if (sel && sel.rangeCount && !sel.isCollapsed) 
 	{
+		/* DOM inner text only */
 		string = sel.toString();
 
 		/* convert selected DOM to string */
