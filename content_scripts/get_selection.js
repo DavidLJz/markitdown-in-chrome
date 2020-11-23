@@ -12,7 +12,20 @@
 		dom = () => {
 			let nodes = sel.getRangeAt(0).cloneContents();
 
-			return [...nodes.childNodes].map(
+			if (!nodes.hasChildNodes()) {
+				console.error('Element has no children');
+				return null;
+			}
+
+			let children = nodes.childNodes;
+
+			/* there is a single text node, outerHTML won't work */
+			if (children.length===1 && children[0].nodeType===3) 
+			{
+				return children[0].nodeValue;
+			}
+
+			return [...children].map(
 				n => n.outerHTML 
 			).join('\n')
 		};
@@ -21,12 +34,10 @@
 			'string' : string,
 			'dom' : dom()
 		};
-
-		chrome.storage.local.set(obj);
 	}
 	else
 	{
-		console.log('Nothing selected');
+		console.error('Nothing selected');
 	}
 
 	return obj;

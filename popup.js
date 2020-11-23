@@ -15,28 +15,6 @@ fileTypeSelector.addEventListener('change', function(){
 	}).catch( (err) => console.log(err) );
 });
 
-/* selected text as #output's contents */
-function setPopup(selection) 
-{
-	if (!selection || !selection.string || !selection.dom) 
-	{
-		let mustHide = document.getElementsByClassName('on-selection');
-
-		for (let i = 0; i < mustHide.length; i++) {
-			mustHide[i].style.display = 'none';
-		}
-
-		let mustShow = document.getElementsByClassName('no-selection');
-
-		for (let i = 0; i < mustShow.length; i++) {
-			mustShow[i].style.display = '';
-		}
-
-		return;
-	}
-
-	display.innerHTML = selection.string;
-}
 
 function createFile(data) 
 {
@@ -88,7 +66,7 @@ function getFileFromClip () {
 	return new Promise((resolve,reject) => {
 		chrome.storage.local.get(['string','dom'], function(data){
 			/* there is no data  */
-			if (!data) {
+			if (!data || !data.dom || !data.string) {
 				reject("Couldn't retrieve clipped selection from storage");
 			}
 
@@ -97,13 +75,50 @@ function getFileFromClip () {
 	});
 }
 
+function storeClipboard(obj) {
+	return new Promise ( function (resolve,reject) {
+
+		if (!obj || !obj.string || !obj.dom) {
+			reject('Object selection not valid');
+		}
+
+		display.innerHTML = obj.string;
+
+		for (let i in obj) {
+			obj[i] = DOMPurify.sanitize(obj[i]);
+		}
+
+		chrome.storage.local.set(obj, () => resolve(true)); 
+	});
+}
+
+function clipboardError(err='') {
+	if (err) {
+		console.error(err);
+	}
+
+	let mustHide = document.getElementsByClassName('on-selection');
+
+	for (let i = 0; i < mustHide.length; i++) {
+		mustHide[i].style.display = 'none';
+	}
+
+	let mustShow = document.getElementsByClassName('no-selection');
+
+	for (let i = 0; i < mustShow.length; i++) {
+		mustShow[i].style.display = '';
+	}
+}
+
 chrome.tabs.executeScript({
 		"file" : "content_scripts/get_selection.js"
-	}, function(result) {
-		setPopup(result[0]);
+	}, function (result) {
+		storeClipboard(result[0]).then( () => {
 
-		getFileFromClip().then(function (file) {
-				downloadBtn.setAttribute("download", file.name);
-				downloadBtn.setAttribute("href", file.uri);
-		}).catch( (err) => console.log(err) );
+			getFileFromClip().then(function (file) {
+					downloadBtn.setAttribute("download", file.name);
+					downloadBtn.setAttribute("href", file.uri);
+			}).catch( err => clipboardError(err) );
+
+		}).catch( err => clipboardError(err) );
 });
