@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/DavidLJz/markitdown-in-chrome#readme",
   "dependencies": {
+    "dompurify": "^2.2.2",
     "turndown": "7.*"
   }
 }
